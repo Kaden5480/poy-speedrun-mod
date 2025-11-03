@@ -11,7 +11,7 @@ namespace SpeedrunMod.NoBoulders {
          * </summary>
          * <param name="configFile">The config file to bind configs to</param>
          */
-        public Module(ConfigFile config) : base(config, "No Boulders") {
+        public Module(ConfigFile configFile) : base(configFile, "No Boulders") {
             instance = this;
 
             // Apply early patches

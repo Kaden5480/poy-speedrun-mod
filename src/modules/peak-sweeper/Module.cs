@@ -11,7 +11,7 @@ namespace SpeedrunMod.PeakSweeper {
          * </summary>
          * <param name="configFile">The config file to bind configs to</param>
          */
-        public Module(ConfigFile config) : base(config, "Peak Sweeper") {
+        public Module(ConfigFile configFile) : base(configFile, "Peak Sweeper") {
         }
 
         /**

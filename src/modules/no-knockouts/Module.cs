@@ -11,7 +11,7 @@ namespace SpeedrunMod.NoKnockouts {
          * </summary>
          * <param name="configFile">The config file to bind configs to</param>
          */
-        public Module(ConfigFile config) : base(config, "No Knockouts") {
+        public Module(ConfigFile configFile) : base(configFile, "No Knockouts") {
             instance = this;
 
             // Apply early patches
