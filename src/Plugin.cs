@@ -27,6 +27,7 @@ namespace SpeedrunMod {
 
             modules = new List<BaseModule>();
             modules.Add(new NoBoulders.Module(Config));
+            modules.Add(new NoKnockouts.Module(Config));
 
             ui = new UI(modules);
         }
