@@ -38,5 +38,19 @@ namespace SpeedrunMod {
                 font = text.font;
             }
         }
+
+        /**
+         * <summary>
+         * Checks whether all objects are available.
+         * </summary>
+         * <returns>True if they are, false otherwise</returns>
+         */
+        public bool IsComplete() {
+            return obj != null
+                && font != null
+                && outline != null
+                && text != null
+                && holdsObj != null;
+        }
     }
 }

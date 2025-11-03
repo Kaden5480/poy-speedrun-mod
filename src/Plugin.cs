@@ -46,6 +46,7 @@ namespace SpeedrunMod {
             modules.Add(new NoBoulders.Module(Config));
             modules.Add(new NoKnockouts.Module(Config));
             modules.Add(new PeakSweeper.Module(Config));
+            modules.Add(new VelocityHUD.Module(Config));
 
             ui = new UI(modules);
 
