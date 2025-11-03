@@ -15,7 +15,7 @@ namespace SpeedrunMod.NoBoulders {
             instance = this;
 
             // Apply early patches
-            PatchEarly(new[] {
+            Patch(new[] {
                 typeof(Patches.DisableBoulders),
             });
         }

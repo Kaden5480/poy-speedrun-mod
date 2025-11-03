@@ -15,7 +15,7 @@ namespace SpeedrunMod.NoKnockouts {
             instance = this;
 
             // Apply early patches
-            PatchEarly(new[] {
+            Patch(new[] {
                 typeof(Patches.DisableKnockouts),
             });
         }

@@ -39,11 +39,11 @@ namespace SpeedrunMod.Common {
 
         /**
          * <summary>
-         * Applies early patches.
+         * Applies patches.
          * </summary>
          * <param name="patches">The patches to apply</param>
          */
-        protected void PatchEarly(Type[] patches) {
+        protected void Patch(Type[] patches) {
             foreach (Type patch in patches) {
                 Harmony.CreateAndPatchAll(patch);
                 LogDebug($"Applied patch: {patch}");
