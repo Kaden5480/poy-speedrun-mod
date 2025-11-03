@@ -1,3 +1,6 @@
+using UnityEngine;
+using UnityEngine.UI;
+
 namespace SpeedrunMod {
     /**
      * <summary>

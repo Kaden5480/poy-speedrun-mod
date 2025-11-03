@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace SpeedrunMod {
     /**
      * <summary>
@@ -6,13 +8,13 @@ namespace SpeedrunMod {
      * </summary>
      */
     public static class Cache {
-        public PlayerMove playerMove   { get; private set; }
-        public Rigidbody playerRb      { get; private set; }
-        public RoutingFlag routingFlag { get; private set; }
-        public TimeAttack timeAttack   { get; private set; }
+        public static PlayerMove playerMove   { get; private set; }
+        public static Rigidbody playerRb      { get; private set; }
+        public static RoutingFlag routingFlag { get; private set; }
+        public static TimeAttack timeAttack   { get; private set; }
 
         // Internal categories
-        public TimeAttackUI timeAttackUI { get; private set; }
+        public static TimeAttackUI timeAttackUI { get; private set; }
 
         /**
          * <summary>

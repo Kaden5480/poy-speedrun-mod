@@ -49,6 +49,9 @@
     <Reference Include="Assembly-CSharp.dll">
       <HintPath>$(GameLibPath)/Assembly-CSharp.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.UI.dll">
+      <HintPath>$(GameLibPath)/UnityEngine.UI.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <Target Name="CopyPackageAssembliesToSubFolder" AfterTargets="ResolveReferences">
