@@ -14,7 +14,7 @@ namespace SpeedrunMod.Common {
         private ConfigEntry<bool> _enabled;
         public bool enabled {
             get => _enabled.Value;
-            set => _enabled.Value = value;
+            set => SetEnabled(value);
         }
 
         // The UI for configuration, can be null
@@ -49,6 +49,44 @@ namespace SpeedrunMod.Common {
                 LogDebug($"Applied patch: {patch}");
             }
         }
+
+        /**
+         * <summary>
+         * Updates the value of `enabled`.
+         * </summary>
+         * <param name="value">The new value</param>
+         */
+        private void SetEnabled(bool value) {
+            // Do nothing if no change
+            if (value == enabled) {
+                return;
+            }
+
+            _enabled.Value = value;
+
+            // Otherwise, dispatch
+            if (value == true) {
+                OnModuleEnabled();
+            }
+            else {
+                OnModuleDisabled();
+            }
+
+        }
+
+        /**
+         * <summary>
+         * Executes when the module gets enabled.
+         * </summary>
+         */
+        protected virtual void OnModuleEnabled() {}
+
+        /**
+         * <summary>
+         * Executes when the module gets disabled.
+         * </summary>
+         */
+        protected virtual void OnModuleDisabled() {}
 
         /**
          * <summary>
