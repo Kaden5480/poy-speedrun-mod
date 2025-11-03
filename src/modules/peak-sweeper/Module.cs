@@ -96,9 +96,24 @@ namespace SpeedrunMod.PeakSweeper {
          * </summary>
          */
         private void SweepAll() {
+            // If this module is disabled, or auto sweeping is
+            // disabled, return
+            if (enabled == false || config.autoSweep.Value == false) {
+                return;
+            }
+
             foreach (GameObject obj in GameObject.FindObjectsOfType<GameObject>()) {
                 Sweep(obj);
             }
+        }
+
+        /**
+         * <summary>
+         * Executes when the module gets enabled.
+         * </summary>
+         */
+        protected override void OnModuleEnabled() {
+            SweepAll();
         }
 
         /**
@@ -108,13 +123,6 @@ namespace SpeedrunMod.PeakSweeper {
          * <param name="scene">The scene which loaded</param>
          */
         public override void OnSceneLoad(Scene scene) {
-            // If this module is disabled, or auto sweeping is
-            // disabled, return
-            if (enabled == false || config.autoSweep.Value == false) {
-                return;
-            }
-
-            // Otherwise, auto sweep the scene
             SweepAll();
         }
     }
