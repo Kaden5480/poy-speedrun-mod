@@ -96,6 +96,7 @@ namespace SpeedrunMod {
         protected void OnSceneLoad(Scene scene) {
             // Find objects before doing anything else
             Cache.FindObjects();
+            LogDebug("Cached scene objects");
 
             foreach (BaseModule module in modules) {
                 module.OnSceneLoad(scene);
@@ -115,6 +116,7 @@ namespace SpeedrunMod {
 
             // Clear the cache last
             Cache.Clear();
+            LogDebug("Cleared cache");
         }
 
         /**
