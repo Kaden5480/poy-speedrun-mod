@@ -2,13 +2,30 @@ using System;
 using System.Collections.Generic;
 
 using BepInEx;
+using HarmonyLib;
+using UnityEngine.SceneManagement;
 
 using SpeedrunMod.Common;
 
 namespace SpeedrunMod {
     [BepInPlugin("com.github.Kaden5480.poy-speedrun-mod", "Speedrun Mod", PluginInfo.PLUGIN_VERSION)]
     public class Plugin : BaseUnityPlugin {
-        private static Plugin instance;
+        /**
+         * <summary>
+         * Uses a better entry point to detect when scenes
+         * have been fully loaded.
+         * </summary>
+         */
+        protected static class PatchSceneLoad {
+            [HarmonyPostfix]
+            [HarmonyPatch(typeof(EnterPeakScene), "Start")]
+            [HarmonyPatch(typeof(EnterRoomSegmentScene), "Start")]
+            static void Postfix() {
+                Plugin.instance.OnSceneLoad(SceneManager.GetActiveScene());
+            }
+        }
+
+        public static Plugin instance { get; private set; }
 
         private List<BaseModule> modules;
         private UI ui;
@@ -30,6 +47,30 @@ namespace SpeedrunMod {
             modules.Add(new NoKnockouts.Module(Config));
 
             ui = new UI(modules);
+
+            SceneManager.sceneUnloaded += OnSceneUnload;
+
+            Harmony.CreateAndPatchAll(typeof(PatchSceneLoad));
+        }
+
+        /**
+         * <summary>
+         * Executes when the plugin is being destroyed.
+         * </summary>
+         */
+        private void OnDestroy() {
+            SceneManager.sceneUnloaded -= OnSceneUnload;
+        }
+
+        /**
+         * <summary>
+         * Executes each frame.
+         * </summary>
+         */
+        private void Update() {
+            foreach (BaseModule module in modules) {
+                module.Update();
+            }
         }
 
         /**
@@ -39,6 +80,40 @@ namespace SpeedrunMod {
          */
         private void OnGUI() {
             ui.Render();
+
+            foreach (BaseModule module in modules) {
+                module.OnGUI();
+            }
+        }
+
+        /**
+         * <summary>
+         * Executes on each scene load.
+         * </summary>
+         * <param name="scene">The scene which loaded</param>
+         */
+        protected void OnSceneLoad(Scene scene) {
+            // Find objects before doing anything else
+            Cache.FindObjects();
+
+            foreach (BaseModule module in modules) {
+                module.OnSceneLoad(scene);
+            }
+        }
+
+        /**
+         * <summary>
+         * Executes on scene unloads.
+         * </summary>
+         * <param name="scene">The scene which unloaded</param>
+         */
+        private void OnSceneUnload(Scene scene) {
+            foreach (BaseModule module in modules) {
+                module.OnSceneUnload(scene);
+            }
+
+            // Clear the cache last
+            Cache.Clear();
         }
 
         /**

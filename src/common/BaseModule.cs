@@ -2,6 +2,7 @@ using System;
 
 using BepInEx.Configuration;
 using HarmonyLib;
+using UnityEngine.SceneManagement;
 
 namespace SpeedrunMod.Common {
     public class BaseModule : BaseLoggable {
@@ -48,5 +49,35 @@ namespace SpeedrunMod.Common {
                 LogDebug($"Applied patch: {patch}");
             }
         }
+
+        /**
+         * <summary>
+         * Executes each frame.
+         * </summary>
+         */
+        public virtual void Update() {}
+
+        /**
+         * <summary>
+         * Renders the UI.
+         * </summary>
+         */
+        public virtual void OnGUI() {}
+
+        /**
+         * <summary>
+         * Executes on each scene load.
+         * </summary>
+         * <param name="scene">The scene which loaded</param>
+         */
+        public virtual void OnSceneLoad(Scene scene) {}
+
+        /**
+         * <summary>
+         * Executes on scene unloads.
+         * </summary>
+         * <param name="scene">The scene which unloaded</param>
+         */
+        public virtual void OnSceneUnload(Scene scene) {}
     }
 }
