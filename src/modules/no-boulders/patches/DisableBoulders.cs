@@ -13,12 +13,12 @@ namespace SpeedrunMod.NoBoulders.Patches {
         }
 
         public static bool Prefix() {
-            if (Module.instance.enabled == true) {
-                LogDebug("Bypassing initialising boulders");
-                return false;
+            if (Module.instance.enabled == false) {
+                return true;
             }
 
-            return true;
+            LogDebug("Bypassing initialising boulders");
+            return false;
         }
     }
 }
