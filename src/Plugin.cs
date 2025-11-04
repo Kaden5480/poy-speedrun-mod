@@ -43,6 +43,7 @@ namespace SpeedrunMod {
             instance = this;
 
             modules = new List<BaseModule>();
+            modules.Add(new MeshViewer.Module(Config));
             modules.Add(new NoBoulders.Module(Config));
             modules.Add(new NoKnockouts.Module(Config));
             modules.Add(new PeakSweeper.Module(Config));
