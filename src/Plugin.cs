@@ -1,8 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Reflection.Emit;
 
 using BepInEx;
 using HarmonyLib;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 using SpeedrunMod.Common;
@@ -12,16 +16,18 @@ namespace SpeedrunMod {
     public class Plugin : BaseUnityPlugin {
         /**
          * <summary>
-         * Uses a better entry point to detect when scenes
-         * have been fully loaded.
+         * Uses a better entry point to detect when
+         * custom levels have been fully loaded.
          * </summary>
          */
-        protected static class PatchSceneLoad {
-            [HarmonyPostfix]
-            [HarmonyPatch(typeof(EnterPeakScene), "Start")]
-            [HarmonyPatch(typeof(EnterRoomSegmentScene), "Start")]
-            static void Postfix() {
-                Plugin.instance.OnSceneLoad(SceneManager.GetActiveScene());
+        [HarmonyPatch(typeof(CustomLevel_DistanceActivator), "InitializeObjects")]
+        protected static class PatchCustomSceneLoad {
+            public static void Postfix() {
+                Scene scene = SceneManager.GetActiveScene();
+                // Make sure this only runs in a custom level
+                if (scene.buildIndex == 69) {
+                    Plugin.instance.OnAnySceneLoad(scene);
+                }
             }
         }
 
@@ -51,9 +57,10 @@ namespace SpeedrunMod {
 
             ui = new UI(modules);
 
+            SceneManager.sceneLoaded += OnSceneLoad;
             SceneManager.sceneUnloaded += OnSceneUnload;
 
-            Harmony.CreateAndPatchAll(typeof(PatchSceneLoad));
+            Harmony.CreateAndPatchAll(typeof(PatchCustomSceneLoad));
         }
 
         /**
@@ -62,6 +69,7 @@ namespace SpeedrunMod {
          * </summary>
          */
         private void OnDestroy() {
+            SceneManager.sceneLoaded -= OnSceneLoad;
             SceneManager.sceneUnloaded -= OnSceneUnload;
         }
 
@@ -95,13 +103,28 @@ namespace SpeedrunMod {
          * </summary>
          * <param name="scene">The scene which loaded</param>
          */
-        protected void OnSceneLoad(Scene scene) {
+        private void OnAnySceneLoad(Scene scene) {
             // Find objects before doing anything else
             Cache.FindObjects();
             LogDebug("Cached scene objects");
 
             foreach (BaseModule module in modules) {
                 module.OnSceneLoad(scene);
+            }
+        }
+
+        /**
+         * <summary>
+         * Executes on each scene load.
+         * This will only do anything for non-custom levels.
+         * </summary>
+         * <param name="scene">The scene which loaded</param>
+         * <param name="mode">The mode the scene was loaded with</param>
+         */
+        protected void OnSceneLoad(Scene scene, LoadSceneMode mode) {
+            // Only run on non-custom levels
+            if (scene.buildIndex != 69) {
+                OnAnySceneLoad(scene);
             }
         }
 
