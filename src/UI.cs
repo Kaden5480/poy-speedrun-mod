@@ -6,7 +6,7 @@ using SpeedrunMod.Common;
 
 namespace SpeedrunMod {
     public class UI {
-        private bool enabled = true;
+        private bool enabled = false;
         private List<BaseModule> modules;
 
         private const float width = 180;
@@ -102,22 +102,4 @@ Fast Coffee
     Config
     UI
         enabled
-
-Mesh Viewer
-    Config
-    UI
-        enabled
-
-Peaksweeper
-    Config
-
-No Knockouts
-    Config
-
-No Boulders
-    Config
-
-Velocity HUD
-    Config
-
  */
