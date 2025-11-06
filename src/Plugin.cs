@@ -135,7 +135,6 @@ namespace SpeedrunMod {
         [HarmonyPatch(typeof(LevelEditorManager), "SetPlaymodeObjects")]
         protected static class PatchCustomQuickTest {
             public static void Postfix(bool isPlaymode) {
-                // If not quicktest, just ignore
                 if (isPlaymode == true) {
                     LogDebug("Custom level (quick playtest) dispatched");
                     Plugin.instance.DispatchSceneLoad(SceneManager.GetActiveScene());
