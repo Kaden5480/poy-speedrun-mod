@@ -8,10 +8,11 @@ namespace SpeedrunMod {
      * </summary>
      */
     public static class Cache {
-        public static PlayerMove playerMove   { get; private set; }
-        public static Rigidbody playerRb      { get; private set; }
-        public static RoutingFlag routingFlag { get; private set; }
-        public static TimeAttack timeAttack   { get; private set; }
+        public static LevelEditorManager levelEditorManager { get; private set; }
+        public static PlayerMove playerMove                 { get; private set; }
+        public static Rigidbody playerRb                    { get; private set; }
+        public static RoutingFlag routingFlag               { get; private set; }
+        public static TimeAttack timeAttack                 { get; private set; }
 
         // Internal categories
         public static TimeAttackUI timeAttackUI { get; private set; }
@@ -22,7 +23,16 @@ namespace SpeedrunMod {
          * </summary>
          */
         public static void FindObjects() {
-            playerMove = GameObject.FindObjectOfType<PlayerMove>();
+            // Try using LevelEditorManager to get PlayerMove
+            // as it would be inactive in a custom level normally
+            levelEditorManager = GameObject.FindObjectOfType<LevelEditorManager>();
+            if (levelEditorManager != null) {
+                playerMove = levelEditorManager.playerMove;
+            }
+            else {
+                playerMove = GameObject.FindObjectOfType<PlayerMove>();
+            }
+
             if (playerMove != null) {
                 playerRb = playerMove.rigid;
             }
@@ -39,6 +49,7 @@ namespace SpeedrunMod {
          * </summary>
          */
         public static void Clear() {
+            levelEditorManager = null;
             playerMove = null;
             playerRb = null;
             routingFlag = null;
