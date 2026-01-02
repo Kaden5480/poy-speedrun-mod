@@ -1,20 +1,22 @@
 using System;
-using System.Collections.Generic;
+using System.Linq;
 
 using BepInEx;
 using HarmonyLib;
-using UnityEngine;
+using ModMenu;
+using UILib;
+using UILib.Patches;
 using UnityEngine.SceneManagement;
 
-using SpeedrunMod.Common;
-
 namespace SpeedrunMod {
+    [BepInDependency("com.github.Kaden5480.poy-ui-lib")]
+    [BepInDependency(
+        "com.github.Kaden5480.poy-mod-menu",
+        BepInDependency.DependencyFlags.SoftDependency
+    )]
     [BepInPlugin("com.github.Kaden5480.poy-speedrun-mod", "Speedrun Mod", PluginInfo.PLUGIN_VERSION)]
-    public class Plugin : BaseUnityPlugin {
-        public static Plugin instance { get; private set; }
-
-        private List<BaseModule> modules;
-        private UI ui;
+    internal class Plugin : BaseUnityPlugin {
+        private static Plugin instance;
 
         /**
          * <summary>
@@ -22,161 +24,34 @@ namespace SpeedrunMod {
          * </summary>
          */
         private void Awake() {
-            if (instance != null) {
-                return;
-            }
-
             instance = this;
 
-            modules = new List<BaseModule>();
-            modules.Add(new MeshViewer.Module(Config));
-            modules.Add(new NoBoulders.Module(Config));
-            modules.Add(new NoKnockouts.Module(Config));
-            modules.Add(new PeakSweeper.Module(Config));
-            modules.Add(new VelocityHUD.Module(Config));
+            SceneLoads.AddLoadListener((Scene scene) => {
+                Cache.FindObjects();
+            });
 
-            ui = new UI(modules);
+            SceneLoads.AddUnloadListener((Scene scene) => {
+                Cache.Clear();
+            });
 
-            SceneManager.sceneLoaded += UEOnSceneLoad;
-            SceneManager.sceneUnloaded += UEOnSceneUnload;
-
-            Harmony.CreateAndPatchAll(typeof(PatchCustomSceneLoad));
-            Harmony.CreateAndPatchAll(typeof(PatchCustomQuickTest));
-        }
-
-        /**
-         * <summary>
-         * Executes when the plugin is being destroyed.
-         * </summary>
-         */
-        private void OnDestroy() {
-            SceneManager.sceneLoaded -= UEOnSceneLoad;
-            SceneManager.sceneUnloaded -= UEOnSceneUnload;
-        }
-
-        /**
-         * <summary>
-         * Executes each frame.
-         * </summary>
-         */
-        private void Update() {
-            foreach (BaseModule module in modules) {
-                module.Update();
+            // Register with Mod Menu as an optional dependency
+            if (AccessTools.AllAssemblies().FirstOrDefault(
+                    a => a.GetName().Name == "ModMenu"
+                ) != null
+            ) {
+                Register();
             }
         }
 
         /**
          * <summary>
-         * Renders the UI.
+         * Registers with Mod Menu.
          * </summary>
          */
-        private void OnGUI() {
-            ui.Render();
-
-            foreach (BaseModule module in modules) {
-                module.OnGUI();
-            }
+        private void Register() {
+            ModInfo info = ModManager.Register(this);
+            info.license = "GPL-3.0";
         }
-
-#region Scene Loading/Unloading
-
-        /**
-         * <summary>
-         * Dispatches scene loads to modules.
-         * </summary>
-         * <param name="scene">The scene which loaded</param>
-         */
-        private void DispatchSceneLoad(Scene scene) {
-            // Find objects before doing anything else
-            Cache.FindObjects();
-            LogDebug("Cached scene objects");
-
-            foreach (BaseModule module in modules) {
-                module.OnSceneLoad(scene);
-            }
-        }
-
-        /**
-         * <summary>
-         * Dispatches scene unloads to modules.
-         * </summary>
-         * <param name="scene">The scene which unloaded</param>
-         */
-        private void DispatchSceneUnload(Scene scene) {
-            foreach (BaseModule module in modules) {
-                module.OnSceneUnload(scene);
-            }
-
-            // Clear the cache last
-            Cache.Clear();
-            LogDebug("Cleared cache");
-        }
-
-        /**
-         * <summary>
-         * Dispatches scene load calls when a custom level (in normal play mode)
-         * has been fully loaded.
-         * </summary>
-         */
-        [HarmonyPatch(typeof(CustomLevel_DistanceActivator), "InitializeObjects")]
-        protected static class PatchCustomSceneLoad {
-            public static void Postfix() {
-                LogDebug("Custom level (normal play) dispatched");
-                Plugin.instance.DispatchSceneLoad(SceneManager.GetActiveScene());
-            }
-        }
-
-        /**
-         * <summary>
-         * Dispatches scene load/unload calls when quick playtest mode
-         * is activated/deactivated.
-         * </summary>
-         */
-        [HarmonyPatch(typeof(LevelEditorManager), "SetPlaymodeObjects")]
-        protected static class PatchCustomQuickTest {
-            public static void Postfix(bool isPlaymode) {
-                if (isPlaymode == true) {
-                    LogDebug("Custom level (quick playtest) dispatched");
-                    Plugin.instance.DispatchSceneLoad(SceneManager.GetActiveScene());
-                }
-                else {
-                    LogDebug("Custom level (exit quick playtest) dispatched");
-                    Plugin.instance.DispatchSceneUnload(SceneManager.GetActiveScene());
-                }
-            }
-        }
-
-        /**
-         * <summary>
-         * Executes on each scene load.
-         * This will only do anything for non-custom levels
-         * as custom levels need special entry points.
-         * </summary>
-         * <param name="scene">The scene which loaded</param>
-         * <param name="mode">The mode the scene was loaded with</param>
-         */
-        protected void UEOnSceneLoad(Scene scene, LoadSceneMode mode) {
-            // Only run on non-custom levels
-            if (scene.buildIndex != 69) {
-                LogDebug("Unity scene load dispatched");
-                DispatchSceneLoad(scene);
-            }
-        }
-
-        /**
-         * <summary>
-         * Executes on scene unloads.
-         * </summary>
-         * <param name="scene">The scene which unloaded</param>
-         */
-        private void UEOnSceneUnload(Scene scene) {
-            LogDebug("Unity scene unload dispatched");
-            DispatchSceneUnload(scene);
-        }
-
-#endregion
-
-#region Logging
 
         /**
          * <summary>
@@ -184,7 +59,7 @@ namespace SpeedrunMod {
          * </summary>
          * <param name="message">The message to log</param>
          */
-        public static void LogDebug(string message) {
+        internal static void LogDebug(string message) {
 #if DEBUG
             if (instance == null) {
                 Console.WriteLine($"[Debug] SpeedrunMod: {message}");
@@ -205,7 +80,7 @@ namespace SpeedrunMod {
          * </summary>
          * <param name="message">The message to log</param>
          */
-        public static void LogInfo(string message) {
+        internal static void LogInfo(string message) {
             if (instance == null) {
                 Console.WriteLine($"[Info] SpeedrunMod: {message}");
                 return;
@@ -219,7 +94,7 @@ namespace SpeedrunMod {
          * </summary>
          * <param name="message">The message to log</param>
          */
-        public static void LogError(string message) {
+        internal static void LogError(string message) {
             if (instance == null) {
                 Console.WriteLine($"[Error] SpeedrunMod: {message}");
                 return;
@@ -227,7 +102,4 @@ namespace SpeedrunMod {
             instance.Logger.LogError(message);
         }
     }
-
-#endregion
-
 }

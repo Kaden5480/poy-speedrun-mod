@@ -15,7 +15,6 @@ dotnet build -c Release
 
 mkdir -p "$BP_DIR"/plugins
 
-# BepInEx
 cp bin/release/net472/"$MOD_NAME.dll" \
     "$BP_DIR/plugins/"
 cp build/README.txt "$BP_DIR/README.txt"
