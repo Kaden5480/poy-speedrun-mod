@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 using BepInEx.Configuration;
 using UnityEngine;
@@ -8,6 +9,8 @@ using SpeedrunMod.Common;
 
 namespace SpeedrunMod.MeshViewer {
     public class Module : BaseModule {
+        private List<TrackedObject> objects;
+
         /**
          * <summary>
          * Initializes this module.
@@ -19,22 +22,18 @@ namespace SpeedrunMod.MeshViewer {
 
         /**
          * <summary>
-         * Iterates over objects in the scene and categorises them.
+         * Iterates over objects in the scene and tracks them.
          * </summary>
          */
-        private void Categorise() {
+        private void TrackObjects() {
+            objects = new List<TrackedObject>();
+
             foreach (GameObject obj in GameObject.FindObjectsOfType<GameObject>()) {
-                Categories categories = CategoriesExt.From(obj);
-                if (categories == Categories.None) {
+                if (ObjectTypesExt.From(obj) == ObjectTypes.None) {
                     continue;
                 }
 
-                LogDebug($"===== {obj.name} =====");
-                foreach (Categories cat in Enum.GetValues(typeof(Categories))) {
-                    if (categories.HasFlag(cat) == true) {
-                        LogDebug($"{cat}");
-                    }
-                }
+                objects.Add(new TrackedObject(obj));
             }
         }
 
@@ -44,7 +43,6 @@ namespace SpeedrunMod.MeshViewer {
          * </summary>
          */
         protected override void OnModuleEnabled() {
-            Categorise();
         }
 
         /**
@@ -62,7 +60,6 @@ namespace SpeedrunMod.MeshViewer {
          * <param name="scene">The scene which loaded</param>
          */
         public override void OnSceneLoad(Scene scene) {
-            Categorise();
         }
 
         /**

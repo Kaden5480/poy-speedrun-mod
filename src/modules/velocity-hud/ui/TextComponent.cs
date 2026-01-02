@@ -34,7 +34,6 @@ namespace SpeedrunMod.VelocityHUD {
             Outline outline = obj.AddComponent<Outline>();
             outline.effectColor = Cache.timeAttackUI.outline.effectColor;
             outline.effectDistance = Cache.timeAttackUI.outline.effectDistance;
-
         }
 
         /**

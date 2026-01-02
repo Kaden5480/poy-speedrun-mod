@@ -28,6 +28,8 @@ namespace SpeedrunMod.VelocityHUD {
          * </summary>
          */
         public void Create() {
+            TextComponent.offset = 0;
+
             // Root object
             rootObj = new GameObject("Velocity HUD");
             rootTransform = rootObj.AddComponent<RectTransform>();
@@ -122,6 +124,8 @@ namespace SpeedrunMod.VelocityHUD {
             else {
                 rootTransform.localPosition = normalPosition;
             }
+
+            rootTransform.localScale = Vector2.one;
 
             compMax.SetEnabled(true);
             compCurrent.SetEnabled(!TimeAttack.receivingScore);

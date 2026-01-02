@@ -52,8 +52,8 @@ namespace SpeedrunMod.PeakSweeper {
                 && brickHold != null
                 && brickHold.popoutInstantly == true
             ) {
-                obj.SetActive(false);
-                LogDebug($"Disabled brick: {obj.name}");
+                LogDebug($"Destroyed brick: {obj.name}");
+                GameObject.DestroyImmediate(obj);
                 return;
             }
 
@@ -63,8 +63,8 @@ namespace SpeedrunMod.PeakSweeper {
                 && brittleIce != null
                 && brittleIce.setCustomHp == false
             ) {
-                obj.SetActive(false);
-                LogDebug($"Disabled instantly breakable ice: {obj.name}");
+                LogDebug($"Destroyed instantly breakable ice: {obj.name}");
+                GameObject.DestroyImmediate(obj);
                 return;
             }
 
@@ -73,8 +73,8 @@ namespace SpeedrunMod.PeakSweeper {
             if (config.shrubbery.Value == true
                 && shrubbery != null
             ) {
-                obj.SetActive(false);
-                LogDebug($"Disabled shrubbery: {obj.name}");
+                LogDebug($"Destroyed shrubbery: {obj.name}");
+                GameObject.DestroyImmediate(obj);
                 return;
             }
 
@@ -83,8 +83,8 @@ namespace SpeedrunMod.PeakSweeper {
             if (config.snow.Value == true
                 && snowOnIce != null
             ) {
-                obj.SetActive(false);
-                LogDebug($"Disabled snow: {obj.name}");
+                LogDebug($"Destroyed snow: {obj.name}");
+                GameObject.DestroyImmediate(obj);
                 return;
             }
         }
