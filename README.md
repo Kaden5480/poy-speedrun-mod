@@ -5,6 +5,10 @@
 ![Open issues](https://img.shields.io/github/issues/Kaden5480/poy-speedrun-mod?color=d65c5c)
 ![License](https://img.shields.io/github/license/Kaden5480/poy-speedrun-mod?color=a35cd6)
 
+> [!IMPORTANT]
+> This mod is incomplete and won't have an available release yet.
+> If you know what you're doing and want to try it out, you can follow the [build instructions](#building-from-source).
+
 A
 [Peaks of Yore](https://store.steampowered.com/app/2236070/)
 mod for speedrunning (made with
