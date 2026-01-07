@@ -26,13 +26,8 @@ namespace SpeedrunMod {
         private void Awake() {
             instance = this;
 
-            SceneLoads.AddLoadListener((Scene scene) => {
-                Cache.FindObjects();
-            });
-
-            SceneLoads.AddUnloadListener((Scene scene) => {
-                Cache.Clear();
-            });
+            // Initialize modules
+            Modules.NoKnockouts.Module.Init(Config);
 
             // Register with Mod Menu as an optional dependency
             if (AccessTools.AllAssemblies().FirstOrDefault(
@@ -51,6 +46,9 @@ namespace SpeedrunMod {
         private void Register() {
             ModInfo info = ModManager.Register(this);
             info.license = "GPL-3.0";
+
+            // Register configs for modules
+            info.Add(typeof(Modules.NoKnockouts.Config));
         }
 
         /**
