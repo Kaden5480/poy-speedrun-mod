@@ -4,7 +4,7 @@ using ModMenu.Config;
 namespace SpeedrunMod.Modules.NoKnockouts {
     /**
      * <summary>
-     * The config for No Knockouts.
+     * The config for this module.
      * </summary>
      */
     internal static class Config {
