@@ -27,6 +27,7 @@ namespace SpeedrunMod {
             instance = this;
 
             // Initialize modules
+            Modules.NoBoulders.Module.Init(Config);
             Modules.NoKnockouts.Module.Init(Config);
 
             // Register with Mod Menu as an optional dependency
@@ -48,6 +49,7 @@ namespace SpeedrunMod {
             info.license = "GPL-3.0";
 
             // Register configs for modules
+            info.Add(typeof(Modules.NoBoulders.Config));
             info.Add(typeof(Modules.NoKnockouts.Config));
         }
 
