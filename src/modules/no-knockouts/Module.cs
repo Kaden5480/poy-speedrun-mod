@@ -52,7 +52,7 @@ namespace SpeedrunMod.Modules.NoKnockouts {
          */
         internal static void Init(ConfigFile configFile) {
             Config.Init(configFile);
-            Patcher.Patch<DisableKnockouts>();
+            Patcher.Patch(typeof(DisableKnockouts));
         }
     }
 }

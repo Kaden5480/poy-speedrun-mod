@@ -42,7 +42,7 @@ namespace SpeedrunMod.Modules.NoBoulders {
          */
         internal static void Init(ConfigFile configFile) {
             Config.Init(configFile);
-            Patcher.Patch<DisableBoulders>();
+            Patcher.Patch(typeof(DisableBoulders));
         }
     }
 }

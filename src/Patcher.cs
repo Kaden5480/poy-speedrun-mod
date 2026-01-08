@@ -1,3 +1,7 @@
+using System;
+
+using HarmonyLib;
+
 namespace SpeedrunMod {
     /**
      * <summary>
@@ -9,12 +13,13 @@ namespace SpeedrunMod {
 
         /**
          * <summary>
-         * Applies a patch of type `T` and logs.
+         * Applies a patch of a given type.
          * </summary>
+         * <param name="type">The patch to apply</param>
          */
-        internal static void Apply<T>() {
-            Harmony.CreateAndPatchAll(typeof(T));
-            logger.LogDebug($"Applied patch: {T}");
+        internal static void Patch(Type type) {
+            Harmony.CreateAndPatchAll(type);
+            logger.LogDebug($"Applied patch: {type}");
         }
     }
 }
