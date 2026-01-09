@@ -5,8 +5,6 @@ using BepInEx;
 using HarmonyLib;
 using ModMenu;
 using UILib;
-using UILib.Patches;
-using UnityEngine.SceneManagement;
 
 namespace SpeedrunMod {
     [BepInDependency("com.github.Kaden5480.poy-ui-lib")]
@@ -17,6 +15,7 @@ namespace SpeedrunMod {
     [BepInPlugin("com.github.Kaden5480.poy-speedrun-mod", "Speedrun Mod", PluginInfo.PLUGIN_VERSION)]
     internal class Plugin : BaseUnityPlugin {
         private static Plugin instance;
+        private UI ui;
 
         /**
          * <summary>
@@ -26,9 +25,16 @@ namespace SpeedrunMod {
         private void Awake() {
             instance = this;
 
+            // Initialize main config and UI
+            SpeedrunMod.Config.Init(this.Config);
+            UIRoot.onInit.AddListener(() => {
+                ui = new UI();
+            });
+
             // Initialize modules
-            Modules.NoBoulders.Module.Init(Config);
-            Modules.NoKnockouts.Module.Init(Config);
+            Modules.NoBoulders.Module.Init(this.Config);
+            Modules.NoKnockouts.Module.Init(this.Config);
+            Modules.PeakSweeper.Module.Init(this.Config);
 
             // Register with Mod Menu as an optional dependency
             if (AccessTools.AllAssemblies().FirstOrDefault(
@@ -48,9 +54,13 @@ namespace SpeedrunMod {
             ModInfo info = ModManager.Register(this);
             info.license = "GPL-3.0";
 
+            // Register main config
+            info.Add(typeof(SpeedrunMod.Config));
+
             // Register configs for modules
             info.Add(typeof(Modules.NoBoulders.Config));
             info.Add(typeof(Modules.NoKnockouts.Config));
+            info.Add(typeof(Modules.PeakSweeper.Config));
         }
 
         /**
