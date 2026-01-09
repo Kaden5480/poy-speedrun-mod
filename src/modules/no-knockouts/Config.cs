@@ -21,7 +21,7 @@ namespace SpeedrunMod.Modules.NoKnockouts {
         internal static void Init(ConfigFile configFile) {
             enabled = configFile.Bind(
                 Module.name, "enabled", true,
-                $"Whether {Module.name} is enabled"
+                $"Whether {Module.name} is enabled."
             );
         }
     }

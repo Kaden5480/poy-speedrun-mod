@@ -12,6 +12,7 @@ namespace SpeedrunMod.Modules.NoBoulders {
     [HarmonyPatch(typeof(FallingRock), "InitialiseRock")]
     internal static class DisableBoulders {
         private static bool Prefix() {
+            // TODO: only run on ugsome
             if (Config.enabled.Value == true) {
                 return false;
             }
