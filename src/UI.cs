@@ -6,25 +6,54 @@ using UILib.Layouts;
 using UIButton = UILib.Components.Button;
 
 namespace SpeedrunMod {
+    /**
+     * <summary>
+     * The main UI for Speedrun Mod which lists
+     * all available modules and provides a way
+     * of interacting with them.
+     * </summary>
+     */
     internal class UI {
         private Window window;
 
+        /**
+         * <summary>
+         * Initializes the shortcut to toggle Speedrun Mod's
+         * main UI.
+         *
+         * This shortcut causes the window to toggle on/off,
+         * but the window itself is only built when this
+         * shortcut is triggered for the first time.
+         * </summary>
+         */
         internal UI() {
             Shortcut shortcut = new Shortcut(new[] { Config.toggleKeybind });
             shortcut.onTrigger.AddListener(Toggle);
             UIRoot.AddShortcut(shortcut);
         }
 
+        /**
+         * <summary>
+         * Toggles the visibility of Speedrun Mod's main UI.
+         * </summary>
+         */
         private void Toggle() {
+            // If the window hasn't been built yet, build it
             if (window == null) {
                 BuildUI();
             }
 
+            // Toggle the visibility
             window.ToggleVisibility();
         }
 
+        /**
+         * <summary>
+         * Builds Speedrun Mod's main UI.
+         * </summary>
+         */
         private void BuildUI() {
-            window = new Window("Speedrun Mod", 450f, 600f);
+            window = new Window("Speedrun Mod", 380f, 450f);
             window.SetMinSize(320f, 370f);
 
             // Make sure the content starts at the top
@@ -38,28 +67,26 @@ namespace SpeedrunMod {
             window.scrollView.SetContent(scrollArea);
 
             // Add sections
-            Label simpleTitle = new Label("Simple Modules", 30);
+            Label simpleTitle = new Label("Modules", 35);
             simpleTitle.SetSize(200f, 40f);
             window.Add(simpleTitle);
 
+            // Simple modules
             AddSimple(Modules.NoBoulders.Module.name, Modules.NoBoulders.Config.enabled);
             AddSimple(Modules.NoKnockouts.Module.name, Modules.NoKnockouts.Config.enabled);
 
-            window.Add(new Area(height: 10f));
-
-            Label detailTitle = new Label("Detailed Modules", 30);
-            detailTitle.SetSize(200f, 50f);
-            window.Add(detailTitle);
-
+            // Modules with their own UI
             AddDetailed(Modules.PeakSweeper.Module.name);
         }
 
-        private void AddDetailed(string name) {
-            UIButton button = new UIButton(name, 22);
-            button.SetSize(200f, 40f);
-            window.Add(button);
-        }
-
+        /**
+         * <summary>
+         * Adds a simple module which only has an option to
+         * turn it on/off.
+         * </summary>
+         * <param name="name">The name of the module</param>
+         * <param name="enabled">The ConfigEntry to toggle the module</param>
+         */
         private void AddSimple(string name, ConfigEntry<bool> enabled) {
             Area area = new Area(230f);
             area.SetFill(FillType.Horizontal);
@@ -93,6 +120,23 @@ namespace SpeedrunMod {
             toggleArea.Add(toggle);
 
             window.Add(area);
+        }
+
+        // TODO: This also needs to be provided some kind of UI
+        // class which can be toggled. Perhaps it could be
+        // provided with an arbitrary callback which invokes the
+        // corresponding `Toggle` for the module's UI.
+        /**
+         * <summary>
+         * Adds a button for a more detailed module which
+         * has its own UI.
+         * </summary>
+         * <param name="name">The name of the module</param>
+         */
+        private void AddDetailed(string name) {
+            UIButton button = new UIButton(name, 22);
+            button.SetSize(200f, 40f);
+            window.Add(button);
         }
     }
 }
