@@ -24,7 +24,8 @@ namespace SpeedrunMod {
         }
 
         private void BuildUI() {
-            window = new Window("Speedrun Mod", 600f, 700f);
+            window = new Window("Speedrun Mod", 450f, 600f);
+            window.SetMinSize(320f, 370f);
 
             // Make sure the content starts at the top
             Area scrollArea = new Area();
@@ -60,35 +61,31 @@ namespace SpeedrunMod {
         }
 
         private void AddSimple(string name, ConfigEntry<bool> enabled) {
-            float totalWidth  = 500f;
-            float totalHeight = 30f;
-            float spacing     = 70f;
-
-            Area area = new Area(totalWidth);
+            Area area = new Area(230f);
             area.SetFill(FillType.Horizontal);
-            area.SetSize(0f, totalHeight);
+            area.SetSize(0f, 30f);
             area.SetContentLayout(LayoutType.Horizontal);
-            area.SetElementSpacing(spacing);
+            area.SetElementSpacing(30f);
 
             // Title area
             Area titleArea = new Area();
-            titleArea.SetSize((totalWidth - spacing)/2f, totalHeight);
+            titleArea.SetSize(150f, 30f);
             area.Add(titleArea);
 
-            Label title = new Label($"Enable {name}", 22);
-            title.SetAnchor(AnchorType.MiddleRight);
-            title.SetAlignment(AnchorType.MiddleRight);
+            Label title = new Label(name, 22);
+            title.SetAnchor(AnchorType.MiddleLeft);
+            title.SetAlignment(AnchorType.MiddleLeft);
             title.SetFill(FillType.All);
+            title.SetTooltip(enabled.Description.Description);
             titleArea.Add(title);
 
             // Toggle area
             Area toggleArea = new Area();
-            toggleArea.SetSize((totalWidth - spacing)/2f, totalHeight);
+            toggleArea.SetSize(30f, 30f);
             area.Add(toggleArea);
 
             Toggle toggle = new Toggle(enabled.Value);
-            toggle.SetAnchor(AnchorType.MiddleLeft);
-            toggle.SetOffset(0f, 0f);
+            toggle.SetAnchor(AnchorType.MiddleRight);
             toggle.SetSize(30f, 30f);
             toggle.onValueChanged.AddListener((bool value) => {
                 enabled.Value = value;
