@@ -1,7 +1,6 @@
-using BepInEx.Configuration;
 using HarmonyLib;
 
-namespace SpeedrunMod.Modules.NoBoulders {
+namespace SpeedrunMod.Modules.Misc.Patches {
     /**
      * <summary>
      * Prevents boulders from respawning
@@ -18,31 +17,12 @@ namespace SpeedrunMod.Modules.NoBoulders {
             }
 
             // Only run if enabled
-            if (Config.enabled.Value == false) {
+            if (Config.noBoulders.Value == false) {
                 return true;
             }
 
             // Bypass initializing boulders
             return false;
-        }
-    }
-
-    /**
-     * <summary>
-     * The main module for No Boulders.
-     * </summary>
-     */
-    internal static class Module {
-        /**
-         * <summary>
-         * The name of this module.
-         * </summary>
-         */
-        internal const string name = "No Boulders";
-
-        internal static void Init(ConfigFile configFile) {
-            Config.Init(configFile);
-            Patcher.Patch(typeof(DisableBoulders));
         }
     }
 }

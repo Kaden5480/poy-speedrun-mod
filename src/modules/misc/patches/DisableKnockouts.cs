@@ -1,7 +1,6 @@
-using BepInEx.Configuration;
 using HarmonyLib;
 
-namespace SpeedrunMod.Modules.NoKnockouts {
+namespace SpeedrunMod.Modules.Misc.Patches {
     /**
      * <summary>
      * Patches the knockout animation out in normal mode.
@@ -10,7 +9,7 @@ namespace SpeedrunMod.Modules.NoKnockouts {
     [HarmonyPatch(typeof(FallingEvent), "FellToDeath")]
     internal static class DisableKnockouts {
         private static bool Prefix(FallingEvent __instance) {
-            if (Config.enabled.Value == false) {
+            if (Config.noKnockouts.Value == false) {
                 return true;
             }
 
@@ -27,25 +26,6 @@ namespace SpeedrunMod.Modules.NoKnockouts {
             FallingEvent.fallenToDeath = false;
 
             return false;
-        }
-    }
-
-    /**
-     * <summary>
-     * The main module for No Knockouts.
-     * </summary>
-     */
-    internal static class Module {
-        /**
-         * <summary>
-         * The name of this module.
-         * </summary>
-         */
-        internal const string name = "No Knockouts";
-
-        internal static void Init(ConfigFile configFile) {
-            Config.Init(configFile);
-            Patcher.Patch(typeof(DisableKnockouts));
         }
     }
 }

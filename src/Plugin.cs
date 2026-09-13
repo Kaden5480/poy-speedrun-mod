@@ -24,8 +24,7 @@ namespace SpeedrunMod {
         private void Awake() {
             instance = this;
 
-            Modules.NoBoulders.Module.Init(this.Config);
-            Modules.NoKnockouts.Module.Init(this.Config);
+            Modules.Misc.Module.Init(this.Config);
 
             // Register with Mod Menu as an optional dependency
             if (AccessTools.AllAssemblies().FirstOrDefault(
@@ -50,8 +49,7 @@ namespace SpeedrunMod {
             ModInfo info = ModManager.Register(this);
             info.license = "GPL-3.0";
 
-            info.Add(typeof(Modules.NoBoulders.Config));
-            info.Add(typeof(Modules.NoKnockouts.Config));
+            info.Add(typeof(Modules.Misc.Config));
         }
 
         /**
