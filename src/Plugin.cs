@@ -4,6 +4,7 @@ using System.Linq;
 using BepInEx;
 using HarmonyLib;
 using ModMenu;
+using UILib.Patches;
 
 namespace SpeedrunMod {
     [BepInDependency("com.github.Kaden5480.poy-ui-lib")]
@@ -11,7 +12,7 @@ namespace SpeedrunMod {
         "com.github.Kaden5480.poy-mod-menu",
         BepInDependency.DependencyFlags.SoftDependency
     )]
-    [BepInPlugin("com.github.Kaden5480.poy-speedrun-mod", "SpeedrunMod", PluginInfo.PLUGIN_VERSION)]
+    [BepInPlugin("com.github.Kaden5480.poy-speedrun-mod", "Speedrun Mod", PluginInfo.PLUGIN_VERSION)]
     internal class Plugin : BaseUnityPlugin {
         private static Plugin instance;
 
@@ -23,6 +24,9 @@ namespace SpeedrunMod {
         private void Awake() {
             instance = this;
 
+            Modules.NoBoulders.Module.Init(this.Config);
+            Modules.NoKnockouts.Module.Init(this.Config);
+
             // Register with Mod Menu as an optional dependency
             if (AccessTools.AllAssemblies().FirstOrDefault(
                     a => a.GetName().Name == "ModMenu"
@@ -30,6 +34,11 @@ namespace SpeedrunMod {
             ) {
                 Register();
             }
+
+            SceneLoads.AddLoadListener(Cache.FindObjects);
+            SceneLoads.AddUnloadListener(delegate {
+                Cache.Clear();
+            });
         }
 
         /**
@@ -40,6 +49,9 @@ namespace SpeedrunMod {
         private void Register() {
             ModInfo info = ModManager.Register(this);
             info.license = "GPL-3.0";
+
+            info.Add(typeof(Modules.NoBoulders.Config));
+            info.Add(typeof(Modules.NoKnockouts.Config));
         }
 
         /**
