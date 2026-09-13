@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace SpeedrunMod {
     /**
@@ -7,16 +8,15 @@ namespace SpeedrunMod {
      * </summary>
      */
     internal static class Cache {
-        // The "climbing" object as an example
-        internal static Climbing climbing { get; private set; }
+        internal static Scene scene { get; private set; }
 
         /**
          * <summary>
          * Finds objects on scene loads.
          * </summary>
          */
-        internal static void FindObjects() {
-            climbing = GameObject.FindObjectOfType<Climbing>();
+        internal static void FindObjects(Scene scene) {
+            Cache.scene = scene;
         }
 
         /**
@@ -25,7 +25,6 @@ namespace SpeedrunMod {
          * </summary>
          */
         internal static void Clear() {
-            climbing = null;
         }
     }
 }
