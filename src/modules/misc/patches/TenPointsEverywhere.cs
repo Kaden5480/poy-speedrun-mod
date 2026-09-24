@@ -23,8 +23,18 @@ namespace SpeedrunMod.Modules.Misc.Patches {
                 return false;
             }
 
+            if (Cache.isCustomLevel == true) {
+                return false;
+            }
+
             if (GameManager.control.permaDeathEnabled == true
                 || GameManager.control.freesoloEnabled == true
+            ) {
+                return false;
+            }
+
+            if (Cache.artefactsCollected == false
+                || Cache.ropesCollected == false
             ) {
                 return false;
             }
