@@ -1,5 +1,6 @@
 using BepInEx.Configuration;
 using HarmonyLib;
+using UILib.Patches;
 
 namespace SpeedrunMod.Modules.Misc {
     /**
@@ -19,6 +20,11 @@ namespace SpeedrunMod.Modules.Misc {
             Config.Init(configFile);
             Patcher.Patch(typeof(Patches.DisableBoulders));
             Patcher.Patch(typeof(Patches.DisableKnockouts));
+            Patcher.Patch(typeof(Patches.TenPointsEverywhere));
+        }
+
+        internal static void SceneLoad() {
+            Patches.TenPointsEverywhere.SceneLoad();
         }
     }
 }

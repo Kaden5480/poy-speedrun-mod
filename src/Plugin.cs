@@ -5,6 +5,7 @@ using BepInEx;
 using HarmonyLib;
 using ModMenu;
 using UILib.Patches;
+using UnityEngine.SceneManagement;
 
 namespace SpeedrunMod {
     [BepInDependency("com.github.Kaden5480.poy-ui-lib")]
@@ -34,7 +35,11 @@ namespace SpeedrunMod {
                 Register();
             }
 
-            SceneLoads.AddLoadListener(Cache.FindObjects);
+            SceneLoads.AddLoadListener((Scene scene) => {
+                Cache.FindObjects(scene);
+                Modules.Misc.Module.SceneLoad();
+            });
+
             SceneLoads.AddUnloadListener(delegate {
                 Cache.Clear();
             });

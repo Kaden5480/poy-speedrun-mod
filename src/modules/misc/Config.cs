@@ -12,6 +12,9 @@ namespace SpeedrunMod.Modules.Misc {
         [Field("No Knockouts")]
         internal static ConfigEntry<bool> noKnockouts;
 
+        [Field("Ten Points Everywhere")]
+        internal static ConfigEntry<bool> tenPointsEverywhere;
+
         internal static void Init(ConfigFile configFile) {
             enabled = configFile.Bind(
                 Module.name, "enabled", true,
@@ -26,6 +29,11 @@ namespace SpeedrunMod.Modules.Misc {
             noKnockouts = configFile.Bind(
                 Module.name, "noKnockouts", true,
                 "Whether to disable the knockout animation."
+            );
+
+            tenPointsEverywhere = configFile.Bind(
+                Module.name, "tenPointsEverywhere", true,
+                "Whether to allow 10 point crampons on every level."
             );
         }
     }
