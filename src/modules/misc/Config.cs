@@ -3,9 +3,6 @@ using ModMenu.Config;
 
 namespace SpeedrunMod.Modules.Misc {
     internal static class Config {
-        [Field("Enabled")]
-        internal static ConfigEntry<bool> enabled;
-
         [Field("No Boulders")]
         internal static ConfigEntry<bool> noBoulders;
 
@@ -16,11 +13,6 @@ namespace SpeedrunMod.Modules.Misc {
         internal static ConfigEntry<bool> tenPointsEverywhere;
 
         internal static void Init(ConfigFile configFile) {
-            enabled = configFile.Bind(
-                Module.name, "enabled", true,
-                $"Whether to enable the {Module.name} module."
-            );
-
             noBoulders = configFile.Bind(
                 Module.name, "noBoulders", false,
                 "Whether to prevent boulders from spawning on Ugsome Stórr."
@@ -34,7 +26,7 @@ namespace SpeedrunMod.Modules.Misc {
             tenPointsEverywhere = configFile.Bind(
                 Module.name, "tenPointsEverywhere", false,
                 "Whether to allow 10 point crampons on every level."
-                + " Make sure you have all collectables on the peak for this to unlock."
+                + " Make sure you have all collectibles on the peak for this to unlock."
             );
         }
     }
