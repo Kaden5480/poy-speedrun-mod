@@ -26,7 +26,21 @@ namespace SpeedrunMod {
             instance = this;
 
             Modules.Misc.Module.Init(this.Config);
+            Modules.PeakSweeper.Module.Init(this.Config);
             Modules.VelocityHUD.Module.Init(this.Config);
+
+            SceneLoads.AddLoadListener((Scene scene) => {
+                Cache.FindObjects(scene);
+                Modules.Misc.Module.SceneLoad();
+                Modules.PeakSweeper.Module.SceneLoad();
+                Modules.VelocityHUD.Module.SceneLoad();
+            });
+
+            SceneLoads.AddUnloadListener(delegate {
+                Modules.PeakSweeper.Module.SceneUnload();
+                Modules.VelocityHUD.Module.SceneUnload();
+                Cache.Clear();
+            });
 
             // Register with Mod Menu as an optional dependency
             if (AccessTools.AllAssemblies().FirstOrDefault(
@@ -35,17 +49,6 @@ namespace SpeedrunMod {
             ) {
                 Register();
             }
-
-            SceneLoads.AddLoadListener((Scene scene) => {
-                Cache.FindObjects(scene);
-                Modules.Misc.Module.SceneLoad();
-                Modules.VelocityHUD.Module.SceneLoad();
-            });
-
-            SceneLoads.AddUnloadListener(delegate {
-                Modules.VelocityHUD.Module.SceneUnload();
-                Cache.Clear();
-            });
         }
 
         /**
@@ -67,6 +70,7 @@ namespace SpeedrunMod {
             info.license = "GPL-3.0";
 
             info.Add(typeof(Modules.Misc.Config));
+            info.Add(typeof(Modules.PeakSweeper.Config));
             info.Add(typeof(Modules.VelocityHUD.Config));
         }
 
