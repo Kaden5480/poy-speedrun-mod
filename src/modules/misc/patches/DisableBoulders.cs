@@ -11,17 +11,21 @@ namespace SpeedrunMod.Modules.Misc.Patches {
     [HarmonyPatch(typeof(FallingRock), "InitialiseRock")]
     internal static class DisableBoulders {
         private static bool Prefix() {
+            if (Config.noBoulders.Value == false) {
+                return true;
+            }
+
+            if (GameManager.control.permaDeathEnabled == true
+                || GameManager.control.freesoloEnabled == true
+            ) {
+                return true;
+            }
+
             // Only run on Ugsome Stórr
             if ("Peak_18_FallingBoulders".Equals(Cache.scene.name) == false) {
                 return true;
             }
 
-            // Only run if enabled
-            if (Config.noBoulders.Value == false) {
-                return true;
-            }
-
-            // Bypass initializing boulders
             return false;
         }
     }

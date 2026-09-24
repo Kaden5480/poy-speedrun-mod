@@ -13,7 +13,9 @@ namespace SpeedrunMod.Modules.Misc.Patches {
                 return true;
             }
 
-            if (GameManager.control.permaDeathEnabled || GameManager.control.freesoloEnabled) {
+            if (GameManager.control.permaDeathEnabled == true
+                || GameManager.control.freesoloEnabled == true
+            ) {
                 return true;
             }
 
