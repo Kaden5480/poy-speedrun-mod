@@ -22,18 +22,19 @@ namespace SpeedrunMod.Modules.Misc {
             );
 
             noBoulders = configFile.Bind(
-                Module.name, "noBoulders", true,
+                Module.name, "noBoulders", false,
                 "Whether to prevent boulders from spawning on Ugsome Stórr."
             );
 
             noKnockouts = configFile.Bind(
-                Module.name, "noKnockouts", true,
+                Module.name, "noKnockouts", false,
                 "Whether to disable the knockout animation."
             );
 
             tenPointsEverywhere = configFile.Bind(
-                Module.name, "tenPointsEverywhere", true,
+                Module.name, "tenPointsEverywhere", false,
                 "Whether to allow 10 point crampons on every level."
+                + " Make sure you have all collectables on the peak for this to unlock."
             );
         }
     }
