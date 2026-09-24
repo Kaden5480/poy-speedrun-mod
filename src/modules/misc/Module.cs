@@ -1,6 +1,5 @@
 using BepInEx.Configuration;
 using HarmonyLib;
-using UILib.Patches;
 
 namespace SpeedrunMod.Modules.Misc {
     /**
@@ -9,11 +8,6 @@ namespace SpeedrunMod.Modules.Misc {
      * </summary>
      */
     internal static class Module {
-        /**
-         * <summary>
-         * The name of this module.
-         * </summary>
-         */
         internal const string name = "Misc";
 
         internal static void Init(ConfigFile configFile) {

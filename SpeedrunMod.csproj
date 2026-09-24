@@ -58,9 +58,12 @@
     <Reference Include="ModMenu.dll">
       <HintPath>$(PluginOutputPath)/ModMenu.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.UI.dll">
+      <HintPath>$(GameLibPath)/UnityEngine.UI.dll</HintPath>
+    </Reference>
     <Reference Include="UILib.dll">
       <HintPath>$(PluginOutputPath)/UILib.dll</HintPath>
-    </Reference>
+      </Reference>
   </ItemGroup>
 
   <Target Name="CopyPackageAssembliesToSubFolder" AfterTargets="ResolveReferences">
