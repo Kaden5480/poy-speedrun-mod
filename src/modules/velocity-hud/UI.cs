@@ -8,6 +8,12 @@ using UnityEngine.UI;
 
 namespace SpeedrunMod.Modules.VelocityHUD {
     internal static class UI {
+        private static Vector3 normalPosition
+            = new Vector3(-50f, -10f, 0f);
+
+        private static Vector3 routingPosition
+            = new Vector3(-110f, -10f, 0f);
+
         private static Area area;
         private static Label labelMax;
         private static Label labelCurrent;
@@ -20,7 +26,8 @@ namespace SpeedrunMod.Modules.VelocityHUD {
          */
         private static Label MakeLabel(Outline outline) {
             Label label = new Label(25);
-            label.SetSize(200f, 30f);
+            label.SetSize(200f, 70f);
+            label.SetAlignment(AnchorType.TopLeft);
             label.text.alignByGeometry = false;
 
             Outline newOutline = label.gameObject.AddComponent<Outline>();
@@ -45,15 +52,18 @@ namespace SpeedrunMod.Modules.VelocityHUD {
             area = new Area();
             area.gameObject.name = "Velocity HUD";
             area.rectTransform.SetParent(Cache.timeAttackUI.transform);
-            area.SetSize(600f, 30f);
-            area.SetAnchor(AnchorType.TopMiddle);
-            area.SetOffset(0f, 0f);
+            area.rectTransform.localPosition = normalPosition;
+            area.SetSize(600f, 70f);
 
             labelMax = MakeLabel(outline);
             area.Add(labelMax);
+            labelMax.rectTransform.localPosition
+                = Vector3.zero;
 
             labelCurrent = MakeLabel(outline);
             area.Add(labelCurrent);
+            labelCurrent.rectTransform.localPosition
+                = new Vector3(160f, 0f, 0f);
 
             Theme theme = Theme.GetTheme();
             theme.foreground = Color.white;
@@ -110,6 +120,15 @@ namespace SpeedrunMod.Modules.VelocityHUD {
             if (CanShow() == false) {
                 return;
             }
+
+            if (Cache.routingFlag.currentlyUsingFlag == true) {
+                area.rectTransform.localPosition = routingPosition;
+            }
+            else {
+                area.rectTransform.localPosition = normalPosition;
+            }
+
+            area.rectTransform.localScale = Vector2.one;
 
             labelMax.gameObject.SetActive(true);
             labelCurrent.gameObject.SetActive(!TimeAttack.receivingScore);

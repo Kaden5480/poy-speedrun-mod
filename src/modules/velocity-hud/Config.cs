@@ -10,9 +10,6 @@ namespace SpeedrunMod.Modules.VelocityHUD {
         [Field("Toggle Keybind")]
         internal static ConfigEntry<KeyCode> toggleKeybind;
 
-        [Field("Extended Info")]
-        internal static ConfigEntry<bool> extendedInfo;
-
         internal static void Init(ConfigFile configFile) {
             enabled = configFile.Bind(
                 Module.name, "enabled", true,
@@ -23,11 +20,6 @@ namespace SpeedrunMod.Modules.VelocityHUD {
                 Module.name, "toggleKeybind", KeyCode.Mouse2,
                 $"Keybind to toggle {Module.name}. Use this keybind while"
                 + " you are holding the pocketwatch."
-            );
-
-            extendedInfo = configFile.Bind(
-                Module.name, "extendedInfo", false,
-                "Whether to show extended info."
             );
         }
     }
