@@ -66,15 +66,13 @@ namespace SpeedrunMod.Modules.PeakSweeper {
                     return false;
                 }
 
-                if (obj.transform.parent.name.Contains("BrittleIceContainer_Destroyable") == false
-                    && obj.transform.parent.name.Contains("BrittleIce_Climbable_destroyall") == false
-                ) {
+                BrittleIce ice = obj.transform.parent.GetComponent<BrittleIce>();
+
+                if (ice == null || ice.iceHP >= 1) {
                     return false;
                 }
 
-                if (obj.name.Contains("brittleice_child")) {
-                    return true;
-                }
+                return true;
             }
 
             // Bricks which popout instantly
