@@ -1,3 +1,4 @@
+using HarmonyLib;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -34,19 +35,9 @@ namespace SpeedrunMod {
             Cache.scene = scene;
             isCustomLevel = scene.buildIndex == 69;
 
-            foreach (ArtefactOnPeak artefact in GameObject.FindObjectsOfType<ArtefactOnPeak>()) {
-                if (artefact.gameObject.activeInHierarchy == true) {
-                    artefactsCollected = false;
-                    break;
-                }
-            }
-
-            foreach (RopeCollectable rope in GameObject.FindObjectsOfType<RopeCollectable>()) {
-                if (rope.gameObject.activeInHierarchy == true) {
-                    ropesCollected = false;
-                    break;
-                }
-            }
+            // Set defaults, these are updated by a patch later on
+            artefactsCollected = true;
+            ropesCollected = true;
 
             footPlacement = GameObject.FindObjectOfType<Footplacement>();
             inventory = GameObject.FindObjectOfType<Inventory>();
@@ -65,6 +56,34 @@ namespace SpeedrunMod {
                 Transform t = timeAttackUI.transform.Find("holds_image");
                 if (t != null) {
                     timeAttackHoldsUI = t.gameObject;
+                }
+            }
+        }
+
+        /**
+         * <summary>
+         * Checks whether all artefacts and ropes have been collected from a level.
+         *
+         * When the scene initially loads, all of these objects are active,
+         * they get disabled later on.
+         *
+         * So this patch makes sure to check after they've possibly been disabled.
+         * </summary>
+         */
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(RoutingFlag), "CheckPeaksCompleted")]
+        internal static void UpdateArtefactStates() {
+            foreach (ArtefactOnPeak artefact in GameObject.FindObjectsOfType<ArtefactOnPeak>()) {
+                if (artefact.gameObject.activeInHierarchy == true) {
+                    artefactsCollected = false;
+                    break;
+                }
+            }
+
+            foreach (RopeCollectable rope in GameObject.FindObjectsOfType<RopeCollectable>()) {
+                if (rope.gameObject.activeInHierarchy == true) {
+                    ropesCollected = false;
+                    break;
                 }
             }
         }

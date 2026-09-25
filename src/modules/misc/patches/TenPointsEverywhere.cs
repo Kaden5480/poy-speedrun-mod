@@ -47,7 +47,9 @@ namespace SpeedrunMod.Modules.Misc.Patches {
          * Determines whether this patch should apply.
          * </summary>
          */
-        internal static void SceneLoad() {
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(RoutingFlag), "CheckPeaksCompleted")]
+        internal static void ApplyPatch() {
             // Sensible default states
             boulderingInject = false;
 

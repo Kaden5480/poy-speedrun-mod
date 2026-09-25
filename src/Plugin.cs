@@ -25,13 +25,8 @@ namespace SpeedrunMod {
         private void Awake() {
             instance = this;
 
-            Modules.Misc.Module.Init(this.Config);
-            Modules.PeakSweeper.Module.Init(this.Config);
-            Modules.VelocityHUD.Module.Init(this.Config);
-
             SceneLoads.AddLoadListener((Scene scene) => {
                 Cache.FindObjects(scene);
-                Modules.Misc.Module.SceneLoad();
                 Modules.PeakSweeper.Module.SceneLoad();
                 Modules.VelocityHUD.Module.SceneLoad();
             });
@@ -41,6 +36,13 @@ namespace SpeedrunMod {
                 Modules.VelocityHUD.Module.SceneUnload();
                 Cache.Clear();
             });
+
+            // The cache needs to have patches applied first
+            Patcher.Patch(typeof(Cache));
+
+            Modules.Misc.Module.Init(this.Config);
+            Modules.PeakSweeper.Module.Init(this.Config);
+            Modules.VelocityHUD.Module.Init(this.Config);
 
             // Register with Mod Menu as an optional dependency
             if (AccessTools.AllAssemblies().FirstOrDefault(

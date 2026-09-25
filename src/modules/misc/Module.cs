@@ -16,9 +16,5 @@ namespace SpeedrunMod.Modules.Misc {
             Patcher.Patch(typeof(Patches.DisableKnockouts));
             Patcher.Patch(typeof(Patches.TenPointsEverywhere));
         }
-
-        internal static void SceneLoad() {
-            Patches.TenPointsEverywhere.SceneLoad();
-        }
     }
 }
