@@ -95,11 +95,13 @@ namespace SpeedrunMod.Modules.PeakSweeper {
          * </summary>
          */
         internal static void SceneLoad() {
+            sweptObjects.Clear();
+
             if (Config.enabled.Value == false) {
                 return;
             }
 
-            foreach (GameObject obj in Resources.FindObjectsOfTypeAll<GameObject>()) {
+            foreach (GameObject obj in GameObject.FindObjectsOfType<GameObject>()) {
                 if (ShouldCache(obj) == false) {
                     continue;
                 }
